@@ -1,5 +1,7 @@
 package com.woniu.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -30,9 +32,9 @@ public class CarServiceImpl implements ICarService{
 
 	@Override
 	@Transactional
-	public void findAll() {
-		carMapper.selectByExample(null);
-		
+	public List<Car> findAll() {
+		List<Car> list = carMapper.selectByExample(null);
+		return list;
 	}
 
 }
