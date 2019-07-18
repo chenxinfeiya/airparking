@@ -11,6 +11,10 @@
     <result column="cityid" property="cityid" jdbcType="VARCHAR" />
     <result column="zonename" property="zonename" jdbcType="VARCHAR" />
   </resultMap>
+  
+  <select id="findByCid" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select * from zone where cityid=#{cityid}
+  </select>
   <sql id="Example_Where_Clause" >
     <!--
       WARNING - @mbggenerated

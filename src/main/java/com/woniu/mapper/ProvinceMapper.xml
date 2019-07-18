@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.woniu.mapper.ProvinceMapper" >
+<cache></cache>
   <resultMap id="BaseResultMap" type="com.woniu.model.Province" >
     <!--
       WARNING - @mbggenerated
@@ -9,6 +10,7 @@
     -->
     <id column="provinceid" property="provinceid" jdbcType="VARCHAR" />
     <result column="pname" property="pname" jdbcType="VARCHAR" />
+    <collection property="citys" column="provinceid" select="com.woniu.mapper.CityMapper.findByPid"></collection>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
