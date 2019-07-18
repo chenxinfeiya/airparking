@@ -31,6 +31,7 @@ public class ParkServiceImpl implements IParkService {
 	public void add(Park park) {
 		String uuid = CreateUUID.getUUID();
 //		park.setParkid(uuid);
+		
 		parkMapper.insert(park);
 	}
 
