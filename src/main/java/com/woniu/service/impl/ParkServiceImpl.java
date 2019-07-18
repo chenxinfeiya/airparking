@@ -20,7 +20,7 @@ public class ParkServiceImpl implements IParkService {
 	@Override
 	@Transactional
 	public Park findOne(String parkid) {
-//		Park park = parkMapper.selectByPrimaryKey(parkid);
+		Park park = parkMapper.selectByPrimaryKey(parkid);
 		return null;
 	}
 
@@ -50,5 +50,4 @@ public class ParkServiceImpl implements IParkService {
 	public void update(Park park) {
 		parkMapper.updateByPrimaryKeySelective(park);
 	}
-
 }
