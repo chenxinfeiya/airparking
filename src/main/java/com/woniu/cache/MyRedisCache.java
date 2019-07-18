@@ -1,6 +1,9 @@
 package com.woniu.cache;
 
 import org.apache.ibatis.cache.Cache;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.woniu.ApplicationContextHolder;
@@ -23,25 +26,33 @@ public class MyRedisCache implements Cache{
 	}
 	@Override
 	public void putObject(Object key, Object value) {
-		// TODO Auto-generated method stub
+		redisTemplate.opsForValue().set(key, value);
 		
 	}
 
 	@Override
 	public Object getObject(Object key) {
 		// TODO Auto-generated method stub
-		return null;
+		return redisTemplate.opsForValue().get(key);
 	}
 
 	@Override
 	public Object removeObject(Object key) {
 		// TODO Auto-generated method stub
-		return null;
+		return redisTemplate.delete(key);
 	}
 
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub
+		redisTemplate.execute(new RedisCallback() {
+
+			@Override
+			public Object doInRedis(RedisConnection connection) throws DataAccessException {
+				connection.flushDb();
+				return null;
+			}
+		});
 		
 	}
 
