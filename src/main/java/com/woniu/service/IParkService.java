@@ -5,9 +5,9 @@ import java.util.List;
 import com.woniu.model.Park;
 
 public interface IParkService {
-	Park findOne(Integer parkid);
+	Park findOne(String parkid);
 	List<Park> findAll();
 	void add(Park park);
-	void delete(Integer parkid);
+	void delete(Park park);
 	void update(Park park);
 }
