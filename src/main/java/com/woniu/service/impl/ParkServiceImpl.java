@@ -16,7 +16,7 @@ public class ParkServiceImpl implements IParkService {
 	@Resource
 	private ParkMapper parkMapper;
 	@Override
-	public Park findOne(Integer parkid) {
+	public Park findOne(String parkid) {
 		Park park = parkMapper.selectByPrimaryKey(parkid);
 		return park;
 	}
