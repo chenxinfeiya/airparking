@@ -18,8 +18,15 @@ public class ParkController {
 	@RequestMapping()
 	private Message addPark(Park park) {
 		Message message = null;
-		
-		return null;
+		try {
+			parkServiceImpl.add(park);
+			message = new Message(true, "车位添加成功！");
+		} catch (Exception e) {
+			message = new Message(true, "车位添加失败！" + e);
+			throw new RuntimeException(e);
+		} finally {
+			return message;
+		}
 	}
 	
 }
