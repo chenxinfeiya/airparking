@@ -46,6 +46,7 @@ public class CarController {
 		}
 	}
 	
+	@RequestMapping("findAll")
 	private List finAll() {
 		List<Car> list = carServiceImpl.findAll();
 		return list;
