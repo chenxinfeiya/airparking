@@ -21,7 +21,7 @@ public class ParkServiceImpl implements IParkService {
 	@Transactional
 	public Park findOne(String parkid) {
 		Park park = parkMapper.selectByPrimaryKey(parkid);
-		return null;
+		return park;
 	}
 
 	@Override

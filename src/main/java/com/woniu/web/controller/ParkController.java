@@ -1,8 +1,10 @@
 package com.woniu.web.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +20,7 @@ public class ParkController {
 	@Resource
 	private IParkService parkServiceImpl;
 	
-	@RequestMapping()
+	@RequestMapping("/addPark")
 	private Message addPark(Park park) {
 		Message message = null;
 		try {
@@ -34,7 +36,7 @@ public class ParkController {
 		}
 	}
 	
-	@RequestMapping()
+	@RequestMapping("/delPark")
 	private Message delPark(Park park) {
 		Message message = null;
 		try {
@@ -48,7 +50,7 @@ public class ParkController {
 		}
 	}
 	
-	@RequestMapping()
+	@RequestMapping("/updatePark")
 	private Message updatePark(Park park) {
 		Message message = null;
 		try {
@@ -62,15 +64,17 @@ public class ParkController {
 		}
 	}
 	
-	@RequestMapping
-	private Park findOne(String parkid) {
-		Park findOne = parkServiceImpl.findOne(parkid);
-		return findOne;
+	@RequestMapping("/findOne")
+	private Park findOne(String parkid) throws InterruptedException {
+		Park park = parkServiceImpl.findOne(parkid);
+		return park;
 	}
 	
-	@RequestMapping()
+	@RequestMapping("/findAll")
 	private List findALL() {
 		List<Park> parks = parkServiceImpl.findAll();
+		
+		
 		return parks;
 	}
 	
