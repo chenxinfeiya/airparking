@@ -18,6 +18,10 @@
     <result column="isfinish" property="isfinish" jdbcType="BIT" />
     <result column="carid" property="carid" jdbcType="VARCHAR" />
   </resultMap>
+  
+  <select id="selectByUserid" parameterMap="BaseResultMap" parameterType="String">
+  		select * from porder where userid=#{userid}
+  </select>
   <sql id="Example_Where_Clause" >
     <!--
       WARNING - @mbggenerated

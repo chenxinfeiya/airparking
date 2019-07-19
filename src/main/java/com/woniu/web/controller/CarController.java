@@ -48,8 +48,8 @@ public class CarController {
 	}
 	
 	@RequestMapping("findAll")
-	private List finAll() {
-		List<Car> list = carServiceImpl.findAll();
+	private List finAll(String userid) {
+		List<Car> list = carServiceImpl.findAll(userid);
 		return list;
 	}
 }

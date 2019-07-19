@@ -35,8 +35,8 @@ public class CarServiceImpl implements ICarService{
 
 	@Override
 	@Transactional
-	public List<Car> findAll() {
-		List<Car> list = carMapper.selectByExample(null);
+	public List<Car> findAll(String userid) {
+		List<Car> list = carMapper.selectByUserid(userid);
 		return list;
 	}
 
