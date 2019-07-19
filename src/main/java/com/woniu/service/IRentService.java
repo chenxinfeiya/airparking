@@ -7,5 +7,5 @@ public interface IRentService {
 	void delRent(Rent rent);
 	void updateRent(Rent rent);
 	
-	Rent findOne(String uid);
+	Rent findOne(String rentid);
 }

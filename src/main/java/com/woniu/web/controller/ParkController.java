@@ -73,8 +73,6 @@ public class ParkController {
 	@RequestMapping("/findAll")
 	private List findALL() {
 		List<Park> parks = parkServiceImpl.findAll();
-		
-		
 		return parks;
 	}
 	
