@@ -13,12 +13,12 @@ import com.woniu.service.IParkService;
 import com.woniu.tools.CreateUUID;
 
 @RestController
-@RequestMapping()
+@RequestMapping("/admin/park")
 public class ParkController {
 	@Resource
 	private IParkService parkServiceImpl;
 	
-	@RequestMapping()
+	@RequestMapping("addPark")
 	private Message addPark(Park park) {
 		Message message = null;
 		try {
@@ -34,7 +34,7 @@ public class ParkController {
 		}
 	}
 	
-	@RequestMapping()
+	@RequestMapping("delPark")
 	private Message delPark(Park park) {
 		Message message = null;
 		try {
@@ -48,7 +48,7 @@ public class ParkController {
 		}
 	}
 	
-	@RequestMapping()
+	@RequestMapping("updatePark")
 	private Message updatePark(Park park) {
 		Message message = null;
 		try {
@@ -62,13 +62,13 @@ public class ParkController {
 		}
 	}
 	
-	@RequestMapping
+	@RequestMapping("findOne")
 	private Park findOne(String parkid) {
 		Park findOne = parkServiceImpl.findOne(parkid);
 		return findOne;
 	}
 	
-	@RequestMapping()
+	@RequestMapping("findALL")
 	private List findALL() {
 		List<Park> parks = parkServiceImpl.findAll();
 		return parks;
