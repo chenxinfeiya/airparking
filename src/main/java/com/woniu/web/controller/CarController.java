@@ -12,6 +12,7 @@ import com.woniu.model.Message;
 import com.woniu.service.ICarService;
 
 @RestController
+@RequestMapping("/admin/car")
 public class CarController {
 
 	@Resource
