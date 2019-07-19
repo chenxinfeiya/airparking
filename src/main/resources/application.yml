@@ -7,10 +7,7 @@ spring:
     url: jdbc:mysql://192.168.9.212:3306/sharepark
     username: root
     password: 
-  mvc:
-    view:
-      prefix: /
-      suffix: .jsp
+
       
 logging:
   level:
