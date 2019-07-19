@@ -8,5 +8,5 @@ public interface ICarService {
 	
 	void save(Car car);
 	void delete(Car car);
-	List<Car> findAll();
+	List<Car> findAll(String userid);
 }
