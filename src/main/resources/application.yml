@@ -4,14 +4,14 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.9.212:3306/sharepark?characterEncoding=utf8
-    username: root
-    password: 
+    url: jdbc:mysql://xawn.f3322.net:3306/db7?characterEncoding=utf8
+    username: db7
+    password: 76575656!
   mvc:
     view:
       prefix: /
       suffix: .jsp
-      
+   
 logging:
   level:
     com: 
