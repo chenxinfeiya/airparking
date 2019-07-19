@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="car/save">
+	<form action="admin/car/save">
 		carnum<input type="text" name="carnum"/><br/>
 		carcolor<input type="text" name="carcolor"/>
 		<button type="submit">GO</button>

@@ -25,6 +25,7 @@ public class CarServiceImpl implements ICarService{
 		car.setCarid(CreateUUID.getUUID());
 		carMapper.insertSelective(car);
 	}
+	
 	@Override
 	@Transactional
 	public void delete(Car car) {

@@ -21,7 +21,6 @@ public class CarController {
 	@RequestMapping("save")
 	private Message save(Car car) {
 		Message mes = null;
-		car.setUserid("1");
 		try {
 			carServiceImpl.save(car);
 			mes = new Message(true, "上传成功");
