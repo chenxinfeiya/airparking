@@ -29,14 +29,13 @@ public class RentServiceImol implements IRentService {
 
 	@Override
 	public void updateRent(Rent rent) {
-		// TODO Auto-generated method stub
-
+		rentMapper.updateByPrimaryKeySelective(rent);
 	}
 
 	@Override
-	public Rent findOne(String uid) {
-		// TODO Auto-generated method stub
-		return null;
+	public Rent findOne(String rentid) {
+		Rent rent = rentMapper.selectByPrimaryKey(rentid);
+		return rent;
 	}
 
 }
