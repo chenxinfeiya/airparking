@@ -48,7 +48,9 @@ public class CarController {
 	}
 	
 	@RequestMapping("findAll")
-	private List finAll(String userid) {
+	private List<Car> finAll(String userid) {
+		System.out.println("CarController.finAll()");
+		userid = "1";
 		List<Car> list = carServiceImpl.findAll(userid);
 		return list;
 	}

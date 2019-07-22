@@ -16,8 +16,13 @@ public class UserServiceImpl implements IUserService{
 	
 	@Override
 	public User findAll(String userid) {
-		userMapper.selectByPrimaryKey(userid);
-		return null;
+		User user = userMapper.selectByPrimaryKey(userid);
+		return user;
+	}
+
+	@Override
+	public void savePhoto(User user) {
+		userMapper.insertSelective(user);
 	}
 	
 	

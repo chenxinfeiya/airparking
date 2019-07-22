@@ -16,6 +16,10 @@
     <result column="carinfo" property="carinfo" jdbcType="VARCHAR" />
     <result column="isdelete" property="isdelete" jdbcType="BIT" />
   </resultMap>
+  
+  	<select id="selectByUserid" resultMap="BaseResultMap" parameterType="java.lang.String">
+  		select * from car where userid=#{userid}
+  	</select>
   <sql id="Example_Where_Clause" >
     <!--
       WARNING - @mbggenerated
