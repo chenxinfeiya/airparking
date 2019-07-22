@@ -21,8 +21,8 @@ public class PorderController {
 	private IPorderService porderServiceImpl;
 	
 	@RequestMapping("findAll")
-	private List<Porder> findAll(String userid){
-		List<Porder> list = porderServiceImpl.findAll(userid);
+	private List<Porder> findAll(Porder porder){
+		List<Porder> list = porderServiceImpl.findAll(porder);
 		return list;
 	}
 	
@@ -38,7 +38,6 @@ public class PorderController {
 		} catch (Exception e) {
 			message = new Message(false, "订单失败,请联系程序员小哥哥"+e);
 		}  finally {
-			
 			return message;
 		}
 	}

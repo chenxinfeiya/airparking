@@ -6,7 +6,7 @@ import com.woniu.model.Porder;
 
 
 public interface IPorderService {
-	List<Porder> findAll(String userid);
+	List<Porder> findAll(Porder porder);
 	
 	void save(Porder porder);
 }
