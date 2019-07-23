@@ -293,6 +293,7 @@ public class Porder {
      */
     public Double getTotalprice() {
         return (new Date().getTime() - ostarttime.getTime())/1000/60/60*singleprice;
+        
     }
 
     /**
