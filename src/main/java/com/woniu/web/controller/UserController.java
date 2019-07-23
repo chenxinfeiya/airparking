@@ -38,6 +38,7 @@ public class UserController {
 		User user = userServiceImpl.findAll(userid);
 		return user;
 		
+		
 	}
 	
 	@RequestMapping("uploadmany")
