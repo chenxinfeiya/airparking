@@ -19,11 +19,12 @@ public class PropertyController {
 	
 	@RequestMapping("update")
 	public String update(User user) {
-		user.setUsername(user.getUsername());
-		user.setUserpass(user.getUserpass());
-		user.setUseraddress(user.getUseraddress());
-		user.setUserphoto(user.getUserphoto());
-		user.setUsersex(user.getUsersex());
+		user.setUsername("username");
+		user.setUserpass("userpass");
+		user.setUseraddress("useraddress");
+		user.setUserphoto("userphoto");
+		user.setUsersex(true);
+		property.update(user);
 		return "update.jsp";
 	}
 	
@@ -33,6 +34,7 @@ public class PropertyController {
 	}
 	@RequestMapping("findAll")
 	public List<Porder> findAll(){
-		return null;
+		List<Porder> list = property.findAll("propertyid");
+		return list;
 	}
 }
