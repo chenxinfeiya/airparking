@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <generatorConfiguration >
-   <classPathEntry location="E:\mysql-connector-java-5.1.19.jar"/>	
+   <classPathEntry location="E:\apache-maven-3.6.1\repository\mysql\mysql-connector-java\5.1.19\mysql-connector-java-5.1.19.jar"/>	
   <context id="context1" >
-    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://192.168.9.212:3306/sharepark" userId="root" password="" />
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://xawn.f3322.net:3306/db7" userId="db7" password="76575656!" />
     <javaModelGenerator targetPackage="com.woniu.model" targetProject="airparking" ></javaModelGenerator>
     <sqlMapGenerator targetPackage="com.woniu.mapper" targetProject="airparking" ></sqlMapGenerator>
     <javaClientGenerator targetPackage="com.woniu.mapper" targetProject="airparking" type="XMLMAPPER" />
-<!--     <table schema="" tableName="audit"></table> -->
-<!--     <table schema="" tableName="car"></table> -->
-<!--     <table schema="" tableName="city"></table> -->
-<!--     <table schema="" tableName="collect"></table> -->
-<!--     <table schema="" tableName="comment"></table> -->
-<!--     <table schema="" tableName="complain"></table> -->
-<!--     <table schema="" tableName="invoice"></table> -->
-<!--     <table schema="" tableName="park"></table> -->
+    <table schema="" tableName="audit"></table>
+    <table schema="" tableName="car"></table>
+    <table schema="" tableName="city"></table>
+    <table schema="" tableName="collect"></table>
+    <table schema="" tableName="comment"></table>
+    <table schema="" tableName="complain"></table>
+    <table schema="" tableName="invoice"></table>
+    <table schema="" tableName="park"></table>
     <table schema="" tableName="porder"></table>
-<!--     <table schema="" tableName="property"></table> -->
-<!--     <table schema="" tableName="province"></table> -->
-<!--     <table schema="" tableName="rent"></table> -->
-<!--     <table schema="" tableName="role"></table> -->
-<!--     <table schema="" tableName="roletree"></table> -->
-<!--     <table schema="" tableName="tree"></table> -->
-<!--     <table schema="" tableName="user"></table> -->
-<!--     <table schema="" tableName="user_role"></table> -->
-<!--     <table schema="" tableName="zone"></table> -->
+    <table schema="" tableName="property"></table>
+    <table schema="" tableName="province"></table>
+    <table schema="" tableName="rent"></table>
+    <table schema="" tableName="role"></table>
+    <table schema="" tableName="roletree"></table>
+    <table schema="" tableName="tree"></table>
+    <table schema="" tableName="user"></table>
+    <table schema="" tableName="user_role"></table>
+    <table schema="" tableName="zone"></table>
 
   </context>
 </generatorConfiguration>
