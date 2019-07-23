@@ -76,8 +76,6 @@ public class PorderServiceImpl implements IPorderService{
 		User admin = userMapper.findUearningsByUserid("admin");
 		admin.setUearnings(admin.getUearnings()+porder.getTotalprice()*0.5*(100-pp.getProportion())*0.01);
 		userMapper.updateByPrimaryKeySelective(admin);
-		
-		
 	}
 
 }
