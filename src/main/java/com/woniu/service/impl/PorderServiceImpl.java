@@ -8,7 +8,11 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.woniu.mapper.ParkMapper;
 import com.woniu.mapper.PorderMapper;
+import com.woniu.mapper.PropertyMapper;
+import com.woniu.mapper.UserMapper;
+import com.woniu.model.Park;
 import com.woniu.model.Porder;
 import com.woniu.model.PorderExample;
 import com.woniu.model.PorderExample.Criteria;
@@ -20,6 +24,15 @@ public class PorderServiceImpl implements IPorderService{
 	@Resource
 	private PorderMapper porderMapper;
 	
+	@Resource
+	private UserMapper userMapper;
+	
+	@Resource
+	private PropertyMapper propertyMapper;
+	
+	@Resource
+	private ParkMapper parkMapper;
+	
 	@Override
 	@Transactional
 	public List<Porder> findAll(Porder porder) {
@@ -30,11 +43,21 @@ public class PorderServiceImpl implements IPorderService{
 		List<Porder> list = porderMapper.selectByExample(pe);
 		return list;
 	}
+	
+	
 	@Override
 	@Transactional
 	public void save(Porder porder) {
-		
 		porderMapper.insertSelective(porder);
+	}
+	
+	
+	@Override
+	@Transactional
+	public void settle(Porder porder) {
+		//出租车位方收益
+		Park park = parkMapper.selectByPrimaryKey(porder.getCarid());
+		
 		
 	}
 

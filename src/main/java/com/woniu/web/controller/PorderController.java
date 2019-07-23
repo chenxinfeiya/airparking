@@ -41,6 +41,18 @@ public class PorderController {
 			return message;
 		}
 	}
+	//分账
+	@RequestMapping("settle")
+	private Message settle(Porder porder) {
+		Message message = null;
+		try {
+			porderServiceImpl.settle(porder);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return message;
+	}
 	
 	
 }

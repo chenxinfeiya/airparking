@@ -9,4 +9,6 @@ public interface IPorderService {
 	List<Porder> findAll(Porder porder);
 	
 	void save(Porder porder);
+	
+	void settle(Porder porder);
 }
