@@ -19,6 +19,14 @@
     <result column="propertyphone" property="propertyphone" jdbcType="VARCHAR" />
     <result column="isdelete" property="isdelete" jdbcType="BIT" />
   </resultMap>
+  
+  <!-- 查询物业收益 -->
+  <select id="findPearningsByPropertyid" resultType="BaseResultMap" parameterType="java.lang.String">
+  	 select propertyid,pearnings,proportion from property where propertyid=#{propertyid}
+  </select>
+  
+  
+  
   <sql id="Example_Where_Clause" >
     <!--
       WARNING - @mbggenerated

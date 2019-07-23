@@ -4,12 +4,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.woniu.model.Message;
 import com.woniu.model.Porder;
+import com.woniu.model.User;
 import com.woniu.service.IPorderService;
 import com.woniu.tools.CreateUUID;
 
@@ -43,10 +45,11 @@ public class PorderController {
 	}
 	//分账
 	@RequestMapping("settle")
-	private Message settle(Porder porder) {
+	private Message settle(Porder porder,HttpServletRequest request) {
 		Message message = null;
+		User user = (User)request.getSession().getAttribute("user");
 		try {
-			porderServiceImpl.settle(porder);
+			porderServiceImpl.settle(porder,user);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

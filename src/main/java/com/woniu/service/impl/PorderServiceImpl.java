@@ -16,6 +16,8 @@ import com.woniu.model.Park;
 import com.woniu.model.Porder;
 import com.woniu.model.PorderExample;
 import com.woniu.model.PorderExample.Criteria;
+import com.woniu.model.Property;
+import com.woniu.model.User;
 import com.woniu.service.IPorderService;
 
 @Service
@@ -54,9 +56,26 @@ public class PorderServiceImpl implements IPorderService{
 	
 	@Override
 	@Transactional
-	public void settle(Porder porder) {
+	public void settle(Porder porder,User user1) {
+		//租车方余额结算
+		user1.setUbalance(user1.getUbalance()-porder.getTotalprice());
+		userMapper.updateByPrimaryKeySelective(user1);
+		
 		//出租车位方收益
 		Park park = parkMapper.selectByPrimaryKey(porder.getCarid());
+		User user = userMapper.findUearningsByUserid(park.getUserid());
+		user.setUearnings(user.getUearnings()+porder.getTotalprice()*0.5);
+		userMapper.updateByPrimaryKeySelective(user);
+		
+		//物业方收益
+		Property pp = propertyMapper.findPearningsByPropertyid(park.getPropertyid());
+		pp.setPearnings(pp.getPearnings()+porder.getTotalprice()*0.5*pp.getProportion()*0.01);
+		propertyMapper.updateByPrimaryKeySelective(pp);
+		
+		//平台方收益
+		User admin = userMapper.findUearningsByUserid("admin");
+		admin.setUearnings(user.getUearnings()+porder.getTotalprice()*0.5*(100-pp.getProportion())*0.01);
+		userMapper.updateByPrimaryKeySelective(admin);
 		
 		
 	}
