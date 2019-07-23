@@ -37,7 +37,7 @@ public class LoginController {
 				user.setUserpass(MD5.md5s(user.getUserpass()));
 				user = loginservice.login(user);
 				if(user==null) {
-					map.put("error", "账号或密码错误，请重新输�?");
+					map.put("error", "账号或密码错误，请重新输入");
 					return "index";
 				}else {
 					ObjectMapper objectMapper = new ObjectMapper();

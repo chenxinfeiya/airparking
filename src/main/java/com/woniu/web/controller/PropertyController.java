@@ -1,5 +1,6 @@
 package com.woniu.web.controller;
 
+
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ public class PropertyController {
 		user.setUseraddress("useraddress");
 		user.setUserphoto("userphoto");
 		user.setUsersex(true);
+		user.setBirthday(null);
 		property.update(user);
 		return "update.jsp";
 	}
