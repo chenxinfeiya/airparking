@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,17 +46,16 @@ public class PorderController {
 	}
 	//分账
 	@RequestMapping("settle")
-	private Message settle(Porder porder,HttpServletRequest request) {
+	private Message settle(Porder porder,HttpSession session) {
 		Message message = null;
-		User user = (User)request.getSession().getAttribute("user");
+		User user = (User)session.getAttribute("user");
 		try {
 			porderServiceImpl.settle(porder,user);
+			message = new Message(true, "支付完成");
 		} catch (Exception e) {
-			// TODO: handle exception
+			message = new Message(false, "支付失败,请联系程序员小哥哥"+e);
 		}
-		
 		return message;
 	}
-	
 	
 }

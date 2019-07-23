@@ -74,7 +74,7 @@ public class PorderServiceImpl implements IPorderService{
 		
 		//平台方收益
 		User admin = userMapper.findUearningsByUserid("admin");
-		admin.setUearnings(user.getUearnings()+porder.getTotalprice()*0.5*(100-pp.getProportion())*0.01);
+		admin.setUearnings(admin.getUearnings()+porder.getTotalprice()*0.5*(100-pp.getProportion())*0.01);
 		userMapper.updateByPrimaryKeySelective(admin);
 		
 		

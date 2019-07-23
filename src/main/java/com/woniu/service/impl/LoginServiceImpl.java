@@ -12,12 +12,12 @@ import com.woniu.service.ILoginService;
 @Service
 public class LoginServiceImpl implements ILoginService{
 	@Resource
-	private UserMapper mapper;
+	private UserMapper userMapper;
 
 	@Override
 	@Transactional(readOnly = true)
 	public User login(User user) {
 		// TODO Auto-generated method stub
-		return mapper.login(user);
+		return userMapper.login(user);
 	}
 }

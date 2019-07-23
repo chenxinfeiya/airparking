@@ -5,37 +5,27 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woniu.model.User;
-import com.woniu.service.ITreeService;
-import com.woniu.service.impl.LoginServiceImpl;
-import com.woniu.service.impl.TreeServiceImpl;
-import com.woniu.tools.CreateUUID;
-import com.woniu.tools.MD5;
+import com.woniu.service.ILoginService;
 
 
 @Controller
 public class LoginController {
 		@Resource
-		private LoginServiceImpl loginservice;
+		private ILoginService loginserviceImpl;
 		
 		
 		@RequestMapping("login")
 		public String login(User user,ModelMap map,HttpSession session) throws Exception {
+			System.out.println("LoginController.login()");
 			if(user.getUserpass()!=null)
-				user.setUserpass(MD5.md5s(user.getUserpass()));
-				user = loginservice.login(user);
+				//user.setUserpass(MD5.md5s(user.getUserpass()));
+				user = loginserviceImpl.login(user);
 				if(user==null) {
 					map.put("error", "账号或密码错误，请重新输入");
 					return "index";
