@@ -23,11 +23,11 @@ public class RegisterController {
 	@RequestMapping("save")
 	public String save(User user) {
 		user.setUserid(CreateUUID.getUUID());
-		user.setUsername(user.getUsername());
-		user.setUserpass(MD5.md5s(user.getUserpass()));
-		user.setUserphone(user.getUserphone());
-		user.setUsersex(user.getUsersex());
-		user.setUseraddress(user.getUseraddress());
+		user.setUsername("username");
+		user.setUserpass(MD5.md5s("plainText"));
+		user.setUserphone("userphone");
+		user.setUsersex(true);
+		user.setUseraddress("useraddress");
 		registerServiceImpl.register(user);
 		return "index.jsp";
 		
