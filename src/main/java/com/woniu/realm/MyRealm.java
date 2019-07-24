@@ -1,5 +1,8 @@
 package com.woniu.realm;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.annotation.Resource;
 
 
@@ -8,6 +11,7 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +27,45 @@ public class MyRealm extends AuthorizingRealm{
 	private IUserService userServiceImpl;
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		return null;
+		
+		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+		
+		Object userphone = principals.getPrimaryPrincipal();
+		
+		Set<String> set = new HashSet<>();
+		
+//		if("tiger".equals(uname)) {
+//			set.add("superAdmin");
+//		}else if("root".equals(uname)) {
+//			set.add("admin");
+//		}
+//		
+		info.addRoles(set);
+		
+		Set<String> set2 = new HashSet<>();
+		
+//		if("tiger".equals(uname)) {
+//			set2.add("user:create");
+//			set2.add("user:find");
+//		}
+//		
+		for (String string : set) {
+			System.out.println(string);
+		}
+		for (String str : set2) {
+			System.out.println(str);
+		}
+		
+		info.addStringPermissions(set2);
+		
+		
+		return info;
 	}
 
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		String userphone = token.getPrincipal().toString();
-		
 		User user = userServiceImpl.findByPhone(userphone);
-		
 		String userPhone = "";
 		String userPass = "";
 		if(user!=null) {

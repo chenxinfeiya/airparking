@@ -26,9 +26,9 @@ public class ShiroConfig {
 		// 设置安全管理器
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 		// 默认跳转到登陆页面
-		shiroFilterFactoryBean.setLoginUrl("/login2");
+		shiroFilterFactoryBean.setLoginUrl("/index.html");
 		// 登陆成功后的页面
-		shiroFilterFactoryBean.setSuccessUrl("/admin/index");
+		shiroFilterFactoryBean.setSuccessUrl("/admin/index.html");
 		shiroFilterFactoryBean.setUnauthorizedUrl("/403");
 
 		// 自定义过滤器
@@ -40,12 +40,12 @@ public class ShiroConfig {
 		// 权限控制map
 		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 		// 配置不会被拦截的链接 顺序判断
-		filterChainDefinitionMap.put("/index", "anon");
+		filterChainDefinitionMap.put("/index.html", "anon");
 		// 配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了
 		filterChainDefinitionMap.put("/logout", "logout");
 //        //<!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
 //        //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
-//        filterChainDefinitionMap.put("/**", "anon");
+        filterChainDefinitionMap.put("/**", "authc");
 
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 		return shiroFilterFactoryBean;
