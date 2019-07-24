@@ -129,7 +129,6 @@ public class UserController {
 	@RequestMapping("sendMessage")
 	public Message sendMessage(String userphone) {
 		
-		
 		String host = "http://dingxin.market.alicloudapi.com";
 		String path = "/dx/sendSms";
 		String method = "POST";

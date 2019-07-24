@@ -62,4 +62,9 @@ public class AuditController {
 			return message;
 		}
 	}
+	
+	@RequestMapping("findOne")
+	private Audit findOne(String auditid) {
+		return auditServiceImpl.findOne(auditid);
+	}
 }
