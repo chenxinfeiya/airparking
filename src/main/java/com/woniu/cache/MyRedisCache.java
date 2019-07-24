@@ -3,16 +3,17 @@ package com.woniu.cache;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.ibatis.cache.Cache;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.woniu.ApplicationContextHolder;
 
-@Service
 public class MyRedisCache implements Cache{
 	private String id;
 	
@@ -67,10 +68,5 @@ public class MyRedisCache implements Cache{
 		return 0;
 	}
 	
-	 public void set(String key, String value, int timeout) {
-	        ValueOperations<Object, Object> operations = redisTemplate.opsForValue();
-	        operations.set(key,value,timeout,TimeUnit.MINUTES);
-	    }
-
 
 }

@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpResponse;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +23,7 @@ import org.springframework.web.context.support.ServletContextResource;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.woniu.cache.MyRedis;
 import com.woniu.cache.MyRedisCache;
 import com.woniu.model.Files;
 import com.woniu.model.Message;
@@ -40,7 +43,7 @@ public class UserController {
 	private IUserService userServiceImpl;
 	
 	@Resource
-	private MyRedisCache myRedisCache;
+	private MyRedis MyRedisImpl;
 	
 	@RequestMapping("findAll")
 	public User findAll(String userid) {
@@ -145,7 +148,7 @@ public class UserController {
 		    	HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
 		    	System.out.println(response.toString());
 		    	message = new Message(true, "发送成功");
-		    	myRedisCache.set("SMS"+userphone, querys.get("param"), 120);
+		    	MyRedisImpl.set("SMS"+userphone, querys.get("param"), 120);
 		    } catch (Exception e) {
 		    	e.printStackTrace();
 		    	message = new Message(false, "发送失败");
