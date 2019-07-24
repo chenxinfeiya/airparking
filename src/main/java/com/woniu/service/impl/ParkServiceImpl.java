@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.woniu.mapper.ParkMapper;
 import com.woniu.model.Park;
 import com.woniu.model.ParkExample;
+import com.woniu.model.ParkExample.Criteria;
+import com.woniu.model.User;
 import com.woniu.service.IParkService;
 import com.woniu.tools.CreateUUID;
 
@@ -26,8 +28,12 @@ public class ParkServiceImpl implements IParkService {
 
 	@Override
 	@Transactional
-	public List<Park> findAll() {
-		List<Park> parks = parkMapper.selectByExample(null);
+	public List<Park> findAll(User user) {
+		ParkExample pe = new ParkExample();
+		Criteria criteria = pe.createCriteria();
+		criteria.andIsavailableEqualTo(false);
+		criteria.andUseridNotEqualTo(user.getUseraddress());
+		List<Park> parks = parkMapper.selectByExample(pe);
 		return parks;
 	}
 

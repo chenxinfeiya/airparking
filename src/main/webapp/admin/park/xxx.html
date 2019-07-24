@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+
+</head>
+<body>
+
+<!-- <div id="ccars"> -->
+<!-- <select v-model="selected" name=""> -->
+<!--   <option v-for="car in cars" :value="car.carid" >{{ car.carnum }}</option> -->
+<!-- </select> -->
+<!-- <span>Selected: {{ selected }}</span> -->
+<!-- </div> -->
+<div id="date">
+<select v-model="selected">
+  <option v-for="time in times" :value="time" >{{ time }}</option>
+</select>
+<span>Selected: {{ selected }}</span>
+</div>
+
+</body>
+</html>
+
+<script>
+
+// 	Vue.http.options.emulateJSON = true;//接收的数据全部打成json
+
+// 	var ccars = new Vue({
+// 		el : '#ccars',
+// 		data : {
+// 			cars : ""
+// 		}
+// 		mounted:function(){
+// 		  this.show();
+// 	    },
+// 	  	methods:{
+// 		  show:function(){
+// 			  this.$http.post('findAll',{"userid":"1"}).then(function(res){
+//             	ccars.cars=res.body;
+//             },function(){
+//                 console.log('请求失败处理');
+//             });
+// 		  }
+// 	  	}	
+// 	})
+	
+	var date = new Vue({
+		el : '#date',
+		data : {
+			times : ''
+		},
+		mounted:function(){
+		  this.show();
+	    },
+	    methods:{
+			show:function(){
+				var hh = new Date().getHours();
+				var mm = new Date().getMinutes();
+				var tts = new Array();
+				for(var i = 1 ; i < 5 ; i++){
+					tts[i-1] = hh+":"+(mm+10*i);
+				}
+				this.times = tts;
+	    	}
+		}
+	}) 
+</script>
+
+
+

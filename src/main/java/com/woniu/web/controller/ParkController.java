@@ -5,12 +5,14 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.woniu.model.Message;
 import com.woniu.model.Park;
+import com.woniu.model.User;
 import com.woniu.service.IParkService;
 import com.woniu.tools.CreateUUID;
 
@@ -77,8 +79,9 @@ public class ParkController {
 	
 
 	@RequestMapping("/findAll")
-	private List findALL() {
-		List<Park> parks = parkServiceImpl.findAll();
+	private List<Park> findALL(HttpSession session) {
+		User user = (User)session.getAttribute("user");
+		List<Park> parks = parkServiceImpl.findAll(user);
 		return parks;
 	}
 	

@@ -1,5 +1,6 @@
 package com.woniu.web.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -49,9 +50,8 @@ public class CarController {
 	
 	@RequestMapping("findAll")
 	private List<Car> finAll(String userid) {
-		System.out.println("CarController.finAll()");
-		userid = "1";
 		List<Car> list = carServiceImpl.findAll(userid);
+		
 		return list;
 	}
 }

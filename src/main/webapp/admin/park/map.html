@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<title>测试</title>
+	<style type="text/css">
+		body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+		#l-map{height:100%;width:100%;}
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ubrBKRc4G8vxwfiqpL4P2PeAapRLn85F"></script>
+	<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+	<div id="l-map"></div>
+</body>
+</html>
+<script type="text/javascript">
+	// 百度地图API功能
+	var map = new BMap.Map("l-map");
+	map.centerAndZoom(new BMap.Point(116.328749,40.026922), 13);
+	map.enableScrollWheelZoom(true);
+	var index = 0;
+	var myGeo = new BMap.Geocoder();
+
+	$(function(){
+		$.ajax({
+			type:"post",
+			url:"/admin/park/findAll",
+			contentType:"application/json",
+			headers:{
+				Accept:"application/json"
+				},
+			success:function(data){
+				$.each(data,function(index,obj){
+					var marker = new BMap.Marker(new BMap.Point(obj.x,obj.y));
+					map.addOverlay(marker);
+					marker.setLabel(new BMap.Label(obj.address,{offset:new BMap.Size(20,-10)}));
+					marker.addEventListener("click",attribute);
+					function attribute(){
+				 		window.location.href="admin/park/xxx.html?obj="+obj.parkid;
+				 	}
+				});
+			}
+		});
+	});
+</script>
