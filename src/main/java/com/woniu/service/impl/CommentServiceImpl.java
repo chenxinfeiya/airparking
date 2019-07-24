@@ -15,15 +15,10 @@ import com.woniu.service.ICommentService;
 
 @Service
 public class CommentServiceImpl implements ICommentService {
-	
-	@Resource
-	private AuditMapper auditMapper;
-	@Override
-	public List<Comment> findAll() {
-		return commentMapper.selectByExample(null);
-	}
     @Resource
     private CommentMapper commentMapper;
+
+
 	@Override
 	public void addComment(Comment comment) {
 		// TODO Auto-generated method stub
