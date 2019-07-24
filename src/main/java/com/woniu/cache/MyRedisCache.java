@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.woniu.ApplicationContextHolder;
 
-@Service
+//@Service
 public class MyRedisCache implements Cache{
 	private String id;
 	

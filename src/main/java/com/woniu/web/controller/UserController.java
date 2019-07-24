@@ -2,22 +2,18 @@ package com.woniu.web.controller;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpResponse;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.support.ServletContextResource;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,24 +23,27 @@ import com.woniu.model.Message;
 import com.woniu.model.Messages;
 import com.woniu.model.User;
 import com.woniu.service.IUserService;
-import com.woniu.tools.CreateUUID;
 import com.woniu.tools.HttpUtils;
-import com.woniu.tools.MD5;
 
 
 @RestController
-@RequestMapping("/admin/user")
+@RequestMapping("/admin/user/")
 public class UserController {
 	
 	@Resource
 	private IUserService userServiceImpl;
 	
-	@Resource
-	private MyRedisCache myRedisCache;
-	
+//	@Resource
+//	private MyRedisCache myRedisCache;
 	@RequestMapping("findAll")
-	public User findAll(String userid) {
-		User user = userServiceImpl.findAll(userid);
+	public List<User> findAll() {
+		List<User> list = userServiceImpl.findAll();
+		return list;
+	}
+	
+	@RequestMapping("findOne")
+	public User findOne(String userid) {
+		User user = userServiceImpl.findOne(userid);
 		return user;
 		
 		
@@ -145,7 +144,7 @@ public class UserController {
 		    	HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
 		    	System.out.println(response.toString());
 		    	message = new Message(true, "发送成功");
-		    	myRedisCache.set("SMS"+userphone, querys.get("param"), 120);
+//		    	myRedisCache.set("SMS"+userphone, querys.get("param"), 120);
 		    } catch (Exception e) {
 		    	e.printStackTrace();
 		    	message = new Message(false, "发送失败");

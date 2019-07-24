@@ -1,5 +1,7 @@
 package com.woniu.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -15,7 +17,7 @@ public class UserServiceImpl implements IUserService{
 	private UserMapper userMapper;
 	
 	@Override
-	public User findAll(String userid) {
+	public User findOne(String userid) {
 		User user = userMapper.selectByPrimaryKey(userid);
 		return user;
 	}
@@ -23,6 +25,11 @@ public class UserServiceImpl implements IUserService{
 	@Override
 	public void savePhoto(User user) {
 		userMapper.insertSelective(user);
+	}
+
+	@Override
+	public List<User> findAll() {
+		return userMapper.selectByExample(null);
 	}
 	
 	
