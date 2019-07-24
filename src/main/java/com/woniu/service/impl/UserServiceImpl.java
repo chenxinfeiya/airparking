@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.woniu.mapper.UserMapper;
 import com.woniu.model.User;
+import com.woniu.model.UserExample;
 import com.woniu.service.IUserService;
 
 @Service
@@ -30,6 +31,14 @@ public class UserServiceImpl implements IUserService{
 	@Override
 	public List<User> findAll() {
 		return userMapper.selectByExample(null);
+	}
+
+	@Override
+	public User findByPhone(String userphone) {
+		UserExample example = new UserExample();
+		example.createCriteria().andUserphoneEqualTo(userphone);		
+		List<User> list = userMapper.selectByExample(example);
+		return list!=null?list.get(0):null;
 	}
 	
 	

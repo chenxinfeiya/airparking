@@ -52,7 +52,7 @@
 	  },
 	  methods:{
 		  checkUser:function(){
-			  this.$http.post('logintest',{userphone:this.userphone,userpass:this.userpass}).then(function(res){
+			  this.$http.post('login',{userphone:this.userphone,userpass:this.userpass}).then(function(res){
 				  this.message=res.bodyText;
 				  if(this.message=="true"){
 					  alert(message);
