@@ -12,6 +12,7 @@ import com.woniu.service.IRoleService;
 
 @Service
 public class RoleServiceImpl implements IRoleService {
+	
 	@Resource
 	private RoleMapper roleMapper;
 	

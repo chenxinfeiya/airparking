@@ -11,6 +11,7 @@
     <result column="rolename" property="rolename" jdbcType="VARCHAR" />
   </resultMap>
   
+  
   <select id="findByUid" resultMap="BaseResultMap">
   	SELECT * FROM role WHERE roleid IN
   	(SELECT roleid FROM user WHERE userid=#{userid})
