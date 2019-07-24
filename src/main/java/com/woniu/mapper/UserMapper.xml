@@ -21,12 +21,18 @@
     <result column="isdelete" property="isdelete" jdbcType="BIT" />
     <collection property="roles" column="uid" select="com.woniu.model.RoleMapper.findByUid"></collection>
   </resultMap>
+  
+  <!-- 查询用户收益 -->
+  <select id="findUearningsByUserid" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	 select userid,uearnings from user where userid=#{userid}
+  </select>
+  
   <resultMap type="com.woniu.model.User" id="findWithTree">
   	<collection property="trees" column="uid" select="com.woniu.mapper.TreeMapper.findTreeWithUid"></collection>
   </resultMap>
   
   <select id="login" resultMap="findWithTree" parameterType="com.woniu.model.User">
-  	SELECT * FROM user WHERE username=#{username} AND userpass=#{userpass}
+  	SELECT * FROM user WHERE userphone=#{userphone} AND userpass=#{userpass}
   </select>
   
   <sql id="Example_Where_Clause" >
