@@ -1,6 +1,8 @@
 package com.woniu.web.controller;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -8,6 +10,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpResponse;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +21,14 @@ import org.springframework.web.context.support.ServletContextResource;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.woniu.cache.MyRedisCache;
 import com.woniu.model.Files;
+import com.woniu.model.Message;
 import com.woniu.model.Messages;
 import com.woniu.model.User;
 import com.woniu.service.IUserService;
 import com.woniu.tools.CreateUUID;
+import com.woniu.tools.HttpUtils;
 import com.woniu.tools.MD5;
 
 
@@ -32,6 +38,9 @@ public class UserController {
 	
 	@Resource
 	private IUserService userServiceImpl;
+	
+	@Resource
+	private MyRedisCache myRedisCache;
 	
 	@RequestMapping("findAll")
 	public User findAll(String userid) {
@@ -116,4 +125,38 @@ public class UserController {
 		msg.setSize(54655656);
 		return msg;
 	}
+	
+	@RequestMapping("sendMessage")
+	public Message sendMessage(String userphone) {
+		
+		System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
+		System.setProperty("sun.net.client.defaultReadTimeout", "10000");
+		String host = "http://dingxin.market.alicloudapi.com";
+		String path = "/dx/sendSms";
+		String method = "POST";
+		String appcode = "7e5469eb32b141bb9a182e0b348663e1";
+		Map<String, String> headers = new HashMap<String, String>();
+		//最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+		headers.put("Authorization", "APPCODE " + appcode);
+		Map<String, String> querys = new HashMap<String, String>();
+		querys.put("mobile", userphone);
+		querys.put("param", "code:1234");
+		querys.put("tpl_id", "TP1711063");
+		Map<String, String> bodys = new HashMap<String, String>();
+		Message message = null;
+		 try {
+		    	HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
+		    	System.out.println(response.toString());
+		    	message = new Message(true, "发送成功");
+		    	myRedisCache.set("SMS"+userphone, querys.get("param"), 120);
+		    } catch (Exception e) {
+		    	e.printStackTrace();
+		    	message = new Message(true, "发送失败");
+		    } finally {
+		    	return message;
+		    }
+		
+	}
+	
+	
 }
