@@ -5,6 +5,10 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +26,17 @@ public class LoginController {
 		
 		@RequestMapping("/login")
 		public String  login(String userphone,String userpass){
-			System.out.println("LoginController.login()");
-			System.out.println(userphone);
-			System.out.println(userpass);
+			Subject subject = SecurityUtils.getSubject();
+			if(!subject.isAuthenticated()) {
+				UsernamePasswordToken ut = new UsernamePasswordToken(userphone,userpass);
+				try{
+					subject.login(ut);
+					System.out.println("认证成功");
+					return "true";
+				} catch(IncorrectCredentialsException e){
+					System.out.println("密码异常"); 
+				}
+			}
 			return null;
 		}
 }

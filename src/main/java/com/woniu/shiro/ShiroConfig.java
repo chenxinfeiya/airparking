@@ -61,7 +61,7 @@ public class ShiroConfig {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		// 设置realm
 		System.out.println("securityManager.setRealm(realm);" + realm);
-		realm.setCredentialsMatcher(hashedCredentialsMatcher());
+//		realm.setCredentialsMatcher(hashedCredentialsMatcher());
 		securityManager.setRealm(realm);
 //         securityManager.setRememberMeManager(rememberMeManager());
 		return securityManager;

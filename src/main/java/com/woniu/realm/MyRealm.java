@@ -30,14 +30,15 @@ public class MyRealm extends AuthorizingRealm{
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		String userphone = token.getPrincipal().toString();
 		
-		char[] ca = (char[]) token.getCredentials();
-		for (int i = 0; i < ca.length; i++) {
-			System.out.println(ca[i]);
-		}
 		User user = userServiceImpl.findByPhone(userphone);
-		System.out.println(user.getUserphone());
-		System.out.println(user.getUserpass());
-		AuthenticationInfo info2 = new SimpleAuthenticationInfo(user.getUserphone(),user.getUserpass(),getName());
+		
+		String userPhone = "";
+		String userPass = "";
+		if(user!=null) {
+			userPhone = user.getUserphone();
+			userPass = user.getUserpass();
+		}
+		AuthenticationInfo info2 = new SimpleAuthenticationInfo(userPhone,userPass,getName());
 		return info2;
 	}
 

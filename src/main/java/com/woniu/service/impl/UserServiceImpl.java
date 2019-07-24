@@ -38,7 +38,7 @@ public class UserServiceImpl implements IUserService{
 		UserExample example = new UserExample();
 		example.createCriteria().andUserphoneEqualTo(userphone);		
 		List<User> list = userMapper.selectByExample(example);
-		return list!=null?list.get(0):null;
+		return list.size()==0?null:list.get(0);
 	}
 	
 	
