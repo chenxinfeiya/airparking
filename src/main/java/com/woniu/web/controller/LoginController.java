@@ -38,7 +38,7 @@ public class LoginController {
 				user = loginservice.login(user);
 				if(user==null) {
 					map.put("error", "账号或密码错误，请重新输入");
-					return "index";
+					return "index.html";
 				}else {
 					ObjectMapper objectMapper = new ObjectMapper();
 					String json = objectMapper.writeValueAsString(user.getTrees());
