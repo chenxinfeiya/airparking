@@ -43,5 +43,11 @@ public class CommentServiceImpl implements ICommentService {
 		return commentMapper.selectByPrimaryKey(commentid);
 	}
 
+	@Override
+	public List<Comment> findAll() {
+		// TODO Auto-generated method stub
+		return commentMapper.selectByExample(null);
+	}
+
 }
 
