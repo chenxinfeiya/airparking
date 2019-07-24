@@ -3,6 +3,8 @@ package com.woniu.model;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.validation.annotation.Validated;
+
 public class User {
 	private List roles;
 	private List trees;
