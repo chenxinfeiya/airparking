@@ -14,6 +14,12 @@
     <result column="file" property="file" jdbcType="VARCHAR" />
     <result column="icon" property="icon" jdbcType="VARCHAR" />
   </resultMap>
+  
+  <select id="findTreeWithUid" resultMap="BaseResultMap">
+  	SELECT * FROM tree WHERE id IN(
+  	SELECT id FROM roletree WHERE rid IN
+  	(SELECT rid FROM userrole WHERE uid=#{uid}))
+  </select>
   <sql id="Example_Where_Clause" >
     <!--
       WARNING - @mbggenerated

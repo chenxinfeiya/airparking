@@ -292,7 +292,8 @@ public class Porder {
      * @mbggenerated Mon Jul 22 16:47:55 CST 2019
      */
     public Double getTotalprice() {
-        return totalprice;
+        return (new Date().getTime() - ostarttime.getTime())/1000/60/60*singleprice;
+        
     }
 
     /**

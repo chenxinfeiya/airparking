@@ -1,48 +1,40 @@
 package com.woniu.web.controller;
 
-import javax.annotation.Resource;
+import java.util.List;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woniu.model.User;
-import com.woniu.service.impl.LoginServiceImpl;
+import com.woniu.service.ILoginService;
 
+
+@Controller
 public class LoginController {
-	@Controller
-	public class UserController {
 		@Resource
-		private LoginServiceImpl loginservice;
+		private ILoginService loginserviceImpl;
 		
 		
-		@RequestMapping("Login")
-		public String Login(User user,Model model){
-			
-			//shiro用户认证
-		    //获取subject
-			Subject subject = SecurityUtils.getSubject();
-			//封装用户数据
-			UsernamePasswordToken userToken = new UsernamePasswordToken(user.getUsername(),user.getUserpass());
-			//执行登录方法,用捕捉异常去判断是否登录成功
-			try {
-				subject.login(userToken);
-				return "redirect:/index.jsp";
-			} catch (UnknownAccountException e) {
-				//用户名不存在
-				model.addAttribute("msg","用户名不存在");
-				return "login";
-			}catch (IncorrectCredentialsException e) {
-				//密码错误
-				model.addAttribute("msg","密码错误");
-				return "login";
+		@RequestMapping("login")
+		public String login(User user,ModelMap map,HttpSession session) throws Exception {
+			System.out.println("LoginController.login()");
+			if(user.getUserpass()!=null)
+				//user.setUserpass(MD5.md5s(user.getUserpass()));
+				user = loginserviceImpl.login(user);
+				if(user==null) {
+					map.put("error", "账号或密码错误，请重新输入");
+					return "index.html";
+				}else {
+					ObjectMapper objectMapper = new ObjectMapper();
+					String json = objectMapper.writeValueAsString(user.getTrees());
+					session.setAttribute("json", json);
+					session.setAttribute("user", user);
+					return "redirect:/admin/index.jsp";
+				}
 			}
-			
 		}
-}
-}
