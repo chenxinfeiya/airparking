@@ -1,68 +1,125 @@
 package com.woniu.shiro;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.catalina.realm.UserDatabaseRealm;
-import org.apache.shiro.realm.Realm;
+import javax.servlet.Filter;
+
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
-/**
- * 
- * shiro配置类
- * @author 大王
- *
- */
-//@Configuration
+import com.woniu.realm.MyRealm;
+
+@Configuration
 public class ShiroConfig {
-	//创建shiroFilterFactoryBean
-	@Bean(name="shiroFilterFactorBean")
-	public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("defaultWebSecurityManager")DefaultWebSecurityManager defaultWebSecurityManager) {
+	@Bean
+	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-		//设置安全管理器
-		shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager);
-		//添加shiro内置过滤器
-	/*
-     * anon:表示可以匿名使用。 
-       authc:表示需要认证(登录)才能使用，没有参数 
-       roles：参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，当有多个参数时，例如admins/user/**=roles["admin,guest"],每个参数通过才算通过，相当于hasAllRoles()方法。 
-       perms：参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，例如/admins/user/**=perms["user:add:*,user:modify:*"]，当有多个参数时必须每个参数都通过才通过，想当于isPermitedAll()方法。 
-       rest：根据请求的方法，相当于/admins/user/**=perms[user:method] ,其中method为post，get，delete等。 
-       port：当请求的url的端口不是8081是跳转到schemal://serverName:8081?queryString,其中schmal是协议http或https等，serverName是你访问的host,8081是url配置里port的端口，queryString是你访问的url里的？后面的参数。 
-       authcBasic：没有参数表示httpBasic认证 
-       ssl:表示安全的url请求，协议为https 
-       user:当登入操作时不做检查
-     */
-		Map<String, String> fMap = new HashMap<String, String>();
-		//拦截页面
-		fMap.put("/scess.jsp", "authc");
-		//拦截未授权
-		fMap.put("/lost.jsp", "perms[user:one]");
-		//被拦截返回登录页面
-		shiroFilterFactoryBean.setLoginUrl("/login");
-		//授权拦截返回页面
-		shiroFilterFactoryBean.setUnauthorizedUrl("/permission");
-		shiroFilterFactoryBean.setFilterChainDefinitionMap(fMap);
+		// 设置安全管理器
+		shiroFilterFactoryBean.setSecurityManager(securityManager);
+		// 默认跳转到登陆页面
+		shiroFilterFactoryBean.setLoginUrl("/login2");
+		// 登陆成功后的页面
+		shiroFilterFactoryBean.setSuccessUrl("/admin/index");
+		shiroFilterFactoryBean.setUnauthorizedUrl("/403");
+
+		// 自定义过滤器
+		Map<String, Filter> filterMap = new LinkedHashMap<>();
+
+//        filterMap.put("why", new LoginFilter());
+
+		shiroFilterFactoryBean.setFilters(filterMap);
+		// 权限控制map
+		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+		// 配置不会被拦截的链接 顺序判断
+		filterChainDefinitionMap.put("/index", "anon");
+		// 配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了
+		filterChainDefinitionMap.put("/logout", "logout");
+//        //<!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
+//        //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
+//        filterChainDefinitionMap.put("/**", "anon");
+
+		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 		return shiroFilterFactoryBean;
-		
 	}
-	@Bean(name="defaultWebSecurityManager")
-	//创建DefaultWebSecurityManager
-	public DefaultWebSecurityManager getDefaultWebSecurityManager(@Qualifier("userRealm")Collection<Realm> userRealm){
-		DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
-		defaultWebSecurityManager.setRealms(userRealm);
-		return defaultWebSecurityManager;
-		
+
+	/**
+	 * 核心的安全事务管理器
+	 * 
+	 * @return
+	 */
+	@Bean
+	public SecurityManager securityManager(MyRealm realm) {
+		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+		// 设置realm
+		System.out.println("securityManager.setRealm(realm);" + realm);
+		realm.setCredentialsMatcher(hashedCredentialsMatcher());
+		securityManager.setRealm(realm);
+//         securityManager.setRememberMeManager(rememberMeManager());
+		return securityManager;
 	}
-	
-	//创建Realm
-	@Bean(name="userRealm")
-	public UserDatabaseRealm getUserRealm(){
-		return new UserDatabaseRealm();
-	}
+
+	/**
+	 * 哈希密码比较器。在myShiroRealm中作用参数使用 登陆时会比较用户输入的密码，跟数据库密码配合盐值salt解密后是否一致。
+	 * 
+	 * @return
+	 */
+    @Bean
+    public HashedCredentialsMatcher hashedCredentialsMatcher(){
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+        hashedCredentialsMatcher.setHashAlgorithmName("md5");//散列算法:这里使用md5算法;
+//        hashedCredentialsMatcher.setHashIterations(2);//散列的次数，比如散列两次，相当于 md5( md5(""));
+        return hashedCredentialsMatcher;
+    }
+
+//    //注入缓存
+//    @Bean
+//    public EhCacheManager ehCacheManager(){
+//        System.out.println("ShiroConfiguration.getEhCacheManager()执行");
+//        EhCacheManager cacheManager=new EhCacheManager();
+//        cacheManager.setCacheManagerConfigFile("classpath:config/ehcache-shiro.xml");
+//        return cacheManager;
+//    }
+
+    /**
+     *  开启shiro aop注解支持.
+     *  使用代理方式;所以需要开启代码支持;否则@RequiresRoles等注解无法生效
+     * @param securityManager
+     * @return
+     */
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager){
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+    }
+
+    /**
+     * Shiro生命周期处理器
+     * @return
+     */
+    @Bean
+    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor(){
+        return new LifecycleBeanPostProcessor();
+    }
+
+    /**
+     * 自动创建代理
+     * @return
+     */
+    @Bean
+    @DependsOn({"lifecycleBeanPostProcessor"})
+    public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator(){
+        DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        advisorAutoProxyCreator.setProxyTargetClass(true);
+        return advisorAutoProxyCreator;
+    }
 }
