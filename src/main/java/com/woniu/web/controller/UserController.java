@@ -2,11 +2,11 @@ package com.woniu.web.controller;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,9 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.support.ServletContextResource;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,13 +28,11 @@ import com.woniu.model.Message;
 import com.woniu.model.Messages;
 import com.woniu.model.User;
 import com.woniu.service.IUserService;
-import com.woniu.tools.CreateUUID;
 import com.woniu.tools.HttpUtils;
-import com.woniu.tools.MD5;
 
 
 @RestController
-@RequestMapping("/admin/user")
+@RequestMapping("/admin/user/")
 public class UserController {
 	
 	@Resource
@@ -44,10 +40,15 @@ public class UserController {
 	
 	@Resource
 	private MyRedis MyRedisImpl;
-	
 	@RequestMapping("findAll")
-	public User findAll(String userid) {
-		User user = userServiceImpl.findAll(userid);
+	public List<User> findAll() {
+		List<User> list = userServiceImpl.findAll();
+		return list;
+	}
+	
+	@RequestMapping("findOne")
+	public User findOne(String userid) {
+		User user = userServiceImpl.findOne(userid);
 		return user;
 		
 		
