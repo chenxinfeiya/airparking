@@ -1,10 +1,10 @@
 package com.woniu.realm;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Resource;
-
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -14,10 +14,9 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
+import com.woniu.model.Role;
 import com.woniu.model.User;
 import com.woniu.service.IUserService;
 
@@ -30,16 +29,18 @@ public class MyRealm extends AuthorizingRealm{
 		
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 		
-		Object userphone = principals.getPrimaryPrincipal();
+		String userphone = (String) principals.getPrimaryPrincipal();
+		
+		User user = userServiceImpl.findByPhone(userphone);
 		
 		Set<String> set = new HashSet<>();
 		
-//		if("tiger".equals(uname)) {
-//			set.add("superAdmin");
-//		}else if("root".equals(uname)) {
-//			set.add("admin");
-//		}
-//		
+		if(user!=null) {
+			List<Role> roles = user.getRoles();
+			for (Role role : roles) {
+				set.add(role.getRolename());
+			}
+		}
 		info.addRoles(set);
 		
 		Set<String> set2 = new HashSet<>();
@@ -49,14 +50,14 @@ public class MyRealm extends AuthorizingRealm{
 //			set2.add("user:find");
 //		}
 //		
-		for (String string : set) {
-			System.out.println(string);
-		}
-		for (String str : set2) {
-			System.out.println(str);
-		}
-		
-		info.addStringPermissions(set2);
+//		for (String string : set) {
+//			System.out.println(string);
+//		}
+//		for (String str : set2) {
+//			System.out.println(str);
+//		}
+//		
+//		info.addStringPermissions(set2);
 		
 		
 		return info;
