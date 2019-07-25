@@ -34,16 +34,17 @@ public class MyRealm extends AuthorizingRealm{
 		User user = userServiceImpl.findByPhone(userphone);
 		
 		Set<String> set = new HashSet<>();
-		
-		if(user!=null) {
-			List<Role> roles = user.getRoles();
-			for (Role role : roles) {
-				set.add(role.getRolename());
-			}
-		}
+		System.out.println(user.getRoles());
+		set.add("admin");
+//		if(user!=null) {
+//			List<Role> roles = user.getRoles();
+//			for (Role role : roles) {
+//				set.add(role.getRolename());
+//			}
+//		}
 		info.addRoles(set);
-		
-		Set<String> set2 = new HashSet<>();
+//		
+//		Set<String> set2 = new HashSet<>();
 		
 //		if("tiger".equals(uname)) {
 //			set2.add("user:create");
