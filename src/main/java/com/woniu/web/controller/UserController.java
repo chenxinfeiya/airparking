@@ -39,7 +39,7 @@ public class UserController {
 	private IUserService userServiceImpl;
 	
 	@Resource
-	private MyRedis MyRedisImpl;
+	private MyRedis myRedisImpl;
 	@RequestMapping("findAll")
 	public List<User> findAll() {
 		List<User> list = userServiceImpl.findAll();
@@ -132,7 +132,7 @@ public class UserController {
 	
 	@RequestMapping("sendMessage")
 	public Message sendMessage(String userphone) {
-		
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+userphone);
 		String host = "http://dingxin.market.alicloudapi.com";
 		String path = "/dx/sendSms";
 		String method = "POST";
@@ -149,7 +149,7 @@ public class UserController {
 		    	HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
 		    	System.out.println(response.toString());
 		    	message = new Message(true, "发送成功");
-		    	MyRedisImpl.set("SMS"+userphone, querys.get("param"), 120);
+		    	myRedisImpl.set("SMS"+userphone, querys.get("param"), 120);
 		    } catch (Exception e) {
 		    	e.printStackTrace();
 		    	message = new Message(false, "发送失败");

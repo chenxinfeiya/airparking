@@ -34,7 +34,6 @@ public class MyRealm extends AuthorizingRealm{
 		User user = userServiceImpl.findByPhone(userphone);
 		
 		Set<String> set = new HashSet<>();
-		System.out.println(user.getRoles());
 		if(user!=null && user.getRoles()!=null) {
 			List<Role> roles = user.getRoles();
 			for (Role role : roles) {
