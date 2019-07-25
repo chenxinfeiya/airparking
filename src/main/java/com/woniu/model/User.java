@@ -6,6 +6,16 @@ import java.util.List;
 import org.springframework.validation.annotation.Validated;
 
 public class User {
+	
+	
+	@Override
+	public String toString() {
+		return "User [roles=" + roles + ", trees=" + trees + ", userid=" + userid + ", userphone=" + userphone
+				+ ", userpass=" + userpass + ", birthday=" + birthday + ", username=" + username + ", usersex="
+				+ usersex + ", useraddress=" + useraddress + ", userphoto=" + userphoto + ", uearnings=" + uearnings
+				+ ", ubalance=" + ubalance + ", createtime=" + createtime + ", isdelete=" + isdelete + "]";
+	}
+
 	private List roles;
 	private List trees;
     public List getRoles() {

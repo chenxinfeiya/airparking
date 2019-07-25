@@ -45,6 +45,8 @@
 	var app = new Vue({
 	  el: '#app',
 	  data: {
+		  userphone:'',
+		  userpass:'',
 		  message:''
 	  },
 	  mounted:function(){
@@ -52,11 +54,10 @@
 	  },
 	  methods:{
 		  checkUser:function(){
-			  this.$http.post('login',{userphone:this.userphone,userpass:this.userpass}).then(function(res){
+			  this.$http.post('/login',{userphone:this.userphone,userpass:this.userpass}).then(function(res){
 				  this.message=res.bodyText;
 				  if(this.message=="true"){
-					  alert(message);
-					  location.href="http://localhost:9000/xh.html"
+					  location.href="http://localhost:9000/admin/user/list.html"
 				  }else{
 					  this.message="账号密码错误"
 				  }
