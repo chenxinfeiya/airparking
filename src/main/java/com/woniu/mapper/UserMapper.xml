@@ -19,7 +19,7 @@
     <result column="ubalance" property="ubalance" jdbcType="DOUBLE" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="isdelete" property="isdelete" jdbcType="BIT" />
-    <collection property="roles" column="uid" select="com.woniu.model.RoleMapper.findByUid"></collection>
+    <collection property="roles" column="uid" select="com.woniu.mapper.RoleMapper.findByUid"></collection>
   </resultMap>
   
   <!-- 查询用户收益 -->

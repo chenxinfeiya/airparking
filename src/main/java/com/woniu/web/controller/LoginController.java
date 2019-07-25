@@ -12,6 +12,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +27,7 @@ public class LoginController {
 		
 		@RequestMapping("/login")
 		public String  login(String userphone,String userpass){
+			System.out.println(userphone+"++++++++++++++++++++"+userpass);
 			Subject subject = SecurityUtils.getSubject();
 			if(!subject.isAuthenticated()) {
 				UsernamePasswordToken ut = new UsernamePasswordToken(userphone,userpass);
@@ -37,6 +39,6 @@ public class LoginController {
 					System.out.println("密码异常"); 
 				}
 			}
-			return null;
+			return "true";
 		}
 }
