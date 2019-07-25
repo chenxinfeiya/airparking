@@ -1,14 +1,20 @@
 package com.woniu.web.controller;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woniu.model.Porder;
+import com.woniu.model.Property;
 import com.woniu.model.User;
-import com.woniu.service.IProperty;
+import com.woniu.service.IPropertyService;
 import com.woniu.tools.CreateUUID;
 import com.woniu.tools.MD5;
 
@@ -16,7 +22,7 @@ import com.woniu.tools.MD5;
 @RequestMapping
 public class PropertyController {
 	
-	private IProperty property;
+	private IPropertyService propertyImpl;
 	
 	@RequestMapping("update")
 	public String update(User user) {
@@ -26,17 +32,21 @@ public class PropertyController {
 		user.setUserphoto("userphoto");
 		user.setUsersex(true);
 		user.setBirthday(null);
-		property.update(user);
+		propertyImpl.update(user);
 		return "update.jsp";
 	}
 	
 	@RequestMapping("findUser")
-	public String findUser(String userid) {
-		return "property.findOne(userid)";
+	public String findUser(String propertyid) {
+		Property property = propertyImpl.findOne(propertyid);
+		String propertyname = property.getPropertyname();
+		String propertyphone = property.getPropertyphone();
+		String fulladdress = property.getFulladdress();
+		return "index.html";
 	}
 	@RequestMapping("findAll")
 	public List<Porder> findAll(){
-		List<Porder> list = property.findAll("propertyid");
-		return list;
+		//List<Porder> list = property.findAll("propertyid");
+		return null;
 	}
 }

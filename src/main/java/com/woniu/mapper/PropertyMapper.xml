@@ -20,12 +20,20 @@
     <result column="isdelete" property="isdelete" jdbcType="BIT" />
   </resultMap>
   
+  <!-- 查询属于物业方的车位ID -->
+  <select id="findPropertyWithPark" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	 SELECT * FROM porperty ppt INNER JOIN park par ON WHERE ppt.propertyid=pak.parkid
+  </select>
+  
+  <!--根据物业ID查询出物业信息 -->
+  <select id="findPropertyid" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	SELECT propertyname,fulladdress,propertyphone FROM porperty WHERE porpertyid=#{porpertyid}
+  </select>
   
   <!-- 查询物业收益 -->
   <select id="findPearningsByPropertyid" resultMap="BaseResultMap" parameterType="java.lang.String">
   	 select propertyid,pearnings,proportion from property where propertyid=#{propertyid}
   </select>
-  
   
   <sql id="Example_Where_Clause" >
     <!--
