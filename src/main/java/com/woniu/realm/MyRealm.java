@@ -35,13 +35,12 @@ public class MyRealm extends AuthorizingRealm{
 		
 		Set<String> set = new HashSet<>();
 		System.out.println(user.getRoles());
-		set.add("admin");
-//		if(user!=null) {
-//			List<Role> roles = user.getRoles();
-//			for (Role role : roles) {
-//				set.add(role.getRolename());
-//			}
-//		}
+		if(user!=null && user.getRoles()!=null) {
+			List<Role> roles = user.getRoles();
+			for (Role role : roles) {
+				set.add(role.getRolename());
+			}
+		}
 		info.addRoles(set);
 //		
 //		Set<String> set2 = new HashSet<>();
