@@ -28,6 +28,7 @@ import com.woniu.model.Message;
 import com.woniu.model.Messages;
 import com.woniu.model.User;
 import com.woniu.service.IUserService;
+import com.woniu.tools.GetCode;
 import com.woniu.tools.HttpUtils;
 
 
@@ -141,7 +142,7 @@ public class UserController {
 		headers.put("Authorization", "APPCODE " + appcode);
 		Map<String, String> querys = new HashMap<String, String>();
 		querys.put("mobile", userphone);
-		querys.put("param", "code:1234");
+		querys.put("param", "code:"+GetCode.randomCode());
 		querys.put("tpl_id", "TP1711063");
 		Map<String, String> bodys = new HashMap<String, String>();
 		Message message = null;
