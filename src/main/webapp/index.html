@@ -35,7 +35,7 @@
   </div>
    <div class="input-group">
       <input type="text" v-model="code" class="form-control" name="code" placeholder="请输入验证码">
-      <span class="input-group-addon" @click="getCode()">发送验证码</span>
+      <button @click="getCode()">发送验证码</button>
   </div>
   <button @click="checkUser()">Submit</button>
   {{message}}
@@ -51,6 +51,7 @@
 		  userphone:'',
 		  userpass:'',
 		  code:'',
+		  dis:'',
 		  message:''
 	  },
 	  mounted:function(){
@@ -71,6 +72,7 @@
 		  },
 		  getCode:function(){
 			  this.$http.post('/admin/user/sendMessage',{userphone:this.userphone}).then(function(res){
+				  this.dis="disabled";
 				  this.code=res.body.msg;
 				  alert(this.code.msg);
               },function(){
