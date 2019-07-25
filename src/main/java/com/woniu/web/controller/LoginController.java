@@ -26,9 +26,10 @@ public class LoginController {
 		private ILoginService loginserviceImpl;
 		
 		@RequestMapping("/login")
-		public String  login(String userphone,String userpass){
-			System.out.println(userphone+"++++++++++++++++++++"+userpass);
+		public String  login(String userphone,String userpass,String code){
+			System.out.println(userphone+"++++++++++++++++++++"+userpass+"================="+code);
 			Subject subject = SecurityUtils.getSubject();
+			System.out.println(subject.isAuthenticated());
 			if(!subject.isAuthenticated()) {
 				UsernamePasswordToken ut = new UsernamePasswordToken(userphone,userpass);
 				try{
@@ -39,6 +40,6 @@ public class LoginController {
 					System.out.println("密码异常"); 
 				}
 			}
-			return "true";
+			return "false";
 		}
 }

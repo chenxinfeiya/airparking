@@ -33,7 +33,10 @@
     <label for="exampleInputPassword1">Password</label>
     <input v-model="userpass" type="password" name="userpass" class="form-control" id="exampleInputPassword1" placeholder="Password">
   </div>
-  
+   <div class="input-group">
+      <input type="text" v-model="code" class="form-control" name="code" placeholder="请输入验证码">
+      <span class="input-group-addon" @click="getCode()">发送验证码</span>
+  </div>
   <button @click="checkUser()">Submit</button>
   {{message}}
 </div>
@@ -47,6 +50,7 @@
 	  data: {
 		  userphone:'',
 		  userpass:'',
+		  code:'',
 		  message:''
 	  },
 	  mounted:function(){
@@ -54,13 +58,21 @@
 	  },
 	  methods:{
 		  checkUser:function(){
-			  this.$http.post('/login',{userphone:this.userphone,userpass:this.userpass}).then(function(res){
+			  this.$http.post('/login',{userphone:this.userphone,userpass:this.userpass,code:this.code}).then(function(res){
 				  this.message=res.bodyText;
 				  if(this.message=="true"){
 					  location.href="http://localhost:9000/admin/user/list.html"
 				  }else{
 					  this.message="账号密码错误"
 				  }
+              },function(){
+                  console.log('请求失败处理');
+              });
+		  },
+		  getCode:function(){
+			  this.$http.post('/admin/user/sendMessage',{userphone:this.userphone}).then(function(res){
+				  this.code=res.body.msg;
+				  alert(this.code.msg);
               },function(){
                   console.log('请求失败处理');
               });

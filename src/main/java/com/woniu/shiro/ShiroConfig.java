@@ -42,6 +42,7 @@ public class ShiroConfig {
 		// 配置不会被拦截的链接 顺序判断
 		filterChainDefinitionMap.put("/index.html", "anon");
 		filterChainDefinitionMap.put("/login", "anon");
+		filterChainDefinitionMap.put("/admin/user/**", "anon");
 		filterChainDefinitionMap.put("/admin/user/list.html", "roles[admin]");
 		// 配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了
 		filterChainDefinitionMap.put("/logout", "logout");
