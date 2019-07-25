@@ -7,24 +7,23 @@
     <javaModelGenerator targetPackage="com.woniu.model" targetProject="airparking" ></javaModelGenerator>
     <sqlMapGenerator targetPackage="com.woniu.mapper" targetProject="airparking" ></sqlMapGenerator>
     <javaClientGenerator targetPackage="com.woniu.mapper" targetProject="airparking" type="XMLMAPPER" />
-    <table schema="" tableName="audit"></table>
-    <table schema="" tableName="car"></table>
-    <table schema="" tableName="city"></table>
-    <table schema="" tableName="collect"></table>
-    <table schema="" tableName="comment"></table>
-    <table schema="" tableName="complain"></table>
-    <table schema="" tableName="invoice"></table>
+<!--     <table schema="" tableName="audit"></table> -->
+<!--     <table schema="" tableName="car"></table> -->
+<!--     <table schema="" tableName="city"></table> -->
+<!--     <table schema="" tableName="collect"></table> -->
+<!--     <table schema="" tableName="comment"></table> -->
+<!--     <table schema="" tableName="complain"></table> -->
+<!--     <table schema="" tableName="invoice"></table> -->
     <table schema="" tableName="park"></table>
-    <table schema="" tableName="porder"></table>
-    <table schema="" tableName="property"></table>
-    <table schema="" tableName="province"></table>
-    <table schema="" tableName="rent"></table>
-    <table schema="" tableName="role"></table>
-    <table schema="" tableName="roletree"></table>
-    <table schema="" tableName="tree"></table>
-    <table schema="" tableName="user"></table>
-    <table schema="" tableName="user_role"></table>
-    <table schema="" tableName="zone"></table>
-
+<!--     <table schema="" tableName="porder"></table> -->
+<!--     <table schema="" tableName="property"></table> -->
+<!--     <table schema="" tableName="province"></table> -->
+<!--     <table schema="" tableName="rent"></table> -->
+<!--     <table schema="" tableName="role"></table> -->
+<!--     <table schema="" tableName="roletree"></table> -->
+<!--     <table schema="" tableName="tree"></table> -->
+<!--     <table schema="" tableName="user"></table> -->
+<!--     <table schema="" tableName="user_role"></table> -->
+<!--     <table schema="" tableName="zone"></table> -->
   </context>
 </generatorConfiguration>
