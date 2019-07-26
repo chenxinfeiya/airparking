@@ -10,7 +10,7 @@ import com.woniu.model.Rent;
 import com.woniu.service.IRentService;
 
 @Service
-public class RentServiceImol implements IRentService {
+public class RentServiceImpl implements IRentService {
 	
 	@Resource
 	private RentMapper rentMapper;

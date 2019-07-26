@@ -80,6 +80,7 @@ public class ParkController {
 
 	@RequestMapping("/findAll")
 	private List<Park> findALL(HttpSession session) {
+		System.out.println("ParkController.findALL()");
 		User user = (User)session.getAttribute("user");
 		List<Park> parks = parkServiceImpl.findAll(user);
 		return parks;

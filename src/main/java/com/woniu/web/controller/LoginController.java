@@ -3,6 +3,7 @@ package com.woniu.web.controller;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
@@ -26,7 +27,7 @@ public class LoginController {
 		private ILoginService loginserviceImpl;
 		
 		@RequestMapping("/login")
-		public String  login(String userphone,String userpass,String code){
+		public String  login(String userphone,String userpass,String code,HttpServletRequest req){
 			System.out.println(userphone+"++++++++++++++++++++"+userpass+"================="+code);
 			Subject subject = SecurityUtils.getSubject();
 			System.out.println(subject.isAuthenticated());
@@ -34,6 +35,11 @@ public class LoginController {
 				UsernamePasswordToken ut = new UsernamePasswordToken(userphone,userpass);
 				try{
 					subject.login(ut);
+					boolean flag = subject.isAuthenticated();
+					
+					if(flag) {
+						req.getSession().setAttribute("loginUser", subject.getSession().getAttribute("user"));
+					}
 					System.out.println("认证成功");
 					return "true";
 				} catch(IncorrectCredentialsException e){

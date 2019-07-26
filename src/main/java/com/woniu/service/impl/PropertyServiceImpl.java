@@ -49,9 +49,9 @@ public class PropertyServiceImpl implements IPropertyService {
 		List<Property> list2 = propertyMapper.findAll();
 		for (Property property : list2) {
 			for (Park park : list) {
-				if(property.getProparkid().equals(park.getParkid()) && park.getIsstatus()==true) {
-					String proparkid = property.getProparkid();
-				}
+//				if(property.getProparkid().equals(park.getParkid()) && park.getIsstatus()==true) {
+//					String proparkid = property.getProparkid();
+//				}
 			}
 		}
 

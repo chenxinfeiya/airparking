@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -14,6 +15,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Component;
 
 import com.woniu.model.Role;
@@ -73,6 +75,8 @@ public class MyRealm extends AuthorizingRealm{
 			userPass = user.getUserpass();
 		}
 		AuthenticationInfo info2 = new SimpleAuthenticationInfo(userPhone,userPass,getName());
+		Subject subject = SecurityUtils.getSubject();
+		subject.getSession().setAttribute("user", user);
 		return info2;
 	}
 

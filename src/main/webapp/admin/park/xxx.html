@@ -6,69 +6,551 @@
 <!-- 开发环境版本，包含了有帮助的命令行警告 -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 
 </head>
 <body>
-
-<!-- <div id="ccars"> -->
-<!-- <select v-model="selected" name=""> -->
-<!--   <option v-for="car in cars" :value="car.carid" >{{ car.carnum }}</option> -->
-<!-- </select> -->
-<!-- <span>Selected: {{ selected }}</span> -->
-<!-- </div> -->
-<div id="date">
+<div id="main">
+选择车牌：
 <select v-model="selected">
-  <option v-for="time in times" :value="time" >{{ time }}</option>
+  <option v-for="car in cars" v-bind:value="car.carnum" >{{ car.carnum }}</option>
 </select>
-<span>Selected: {{ selected }}</span>
+<br/>
+
+选择入场时间：
+<select v-model="selected1">
+	<option v-for="time in times" v-bind:value="time" >{{ time.getHours()+":"+time.getMinutes() }}</option>
+</select>
+<br/>
+
+
+预计出场时间：
+<select v-model="syear" v-on:change="changebyyear">
+	<option v-for="year in years" v-bind:value="year" >{{ year }}</option>
+</select>年
+<select v-model="smonth" v-on:change="changebymonth">
+	<option v-for="month in months" v-bind:value="month" >{{ month }}</option>
+</select>月
+<select v-model="sdate" v-on:change="changebydate">
+	<option v-for="date in dates" v-bind:value="date" >{{ date }}</option>
+</select>日
+<select v-model="shour">
+	<option v-for="hour in hours" v-bind:value=hour >{{ hour }}</option>
+</select>时
+<select v-model="sminute">
+	<option v-for="minute in minutes" v-bind:value="minute" >{{ minute }}</option>
+</select>分<br/>
+车位信息：{{ park.parkinfo }}&nbsp;&nbsp;&nbsp;&nbsp;{{ park.parkfloor}}&nbsp;&nbsp;&nbsp;&nbsp;<button v-on:click="shows">查看详情</button>
+<form action="" id="show">
+	名称：{{ park.parkinfo }}<br/>
+	地址：{{ park.parkfloor }}<br/>
+	车位号：{{ park.parknum }}<br/>
+	小时单价：{{ rent.singleprice }}元<br/>
+</form><br/>
+<button v-on:click="commit">立即预定</button>
 </div>
 
 </body>
 </html>
 
 <script>
+DateUtils = (function(){
+	    /*
+	    var locale = {
+	        dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+	        shortDayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+	        monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+	        shortMonthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+	        am: 'AM',
+	        pm: 'PM',
+	        shortAm: 'A',
+	        shortPm: 'P'
+	    };
+	    */
 
-// 	Vue.http.options.emulateJSON = true;//接收的数据全部打成json
+	    var locale = {
+	        dayNames: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+	        shortDayNames: ["日", "一", "二", "三", "四", "五", "六"],
+	        monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+	        shortMonthNames: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"],
+	        am: "上午",
+	        pm: "下午",
+	        shortAm: '上',
+	        shortPm: '下'
+	    };
 
-// 	var ccars = new Vue({
-// 		el : '#ccars',
-// 		data : {
-// 			cars : ""
-// 		}
-// 		mounted:function(){
-// 		  this.show();
-// 	    },
-// 	  	methods:{
-// 		  show:function(){
-// 			  this.$http.post('findAll',{"userid":"1"}).then(function(res){
-//             	ccars.cars=res.body;
-//             },function(){
-//                 console.log('请求失败处理');
-//             });
-// 		  }
-// 	  	}	
-// 	})
+	    /**
+	     * 左边补0
+	     */
+	    function leftPad(str, size){
+	        var result = '' + str;
+
+	        while (result.length < size) {
+	            result = '0' + result;
+	        }
+
+	        return result;
+	    }
+
+	    var parseToken = (function(){
+	        var match2 = /\d{2}/,          // 00 - 99
+	            //match3 = /\d{3}/,          // 000 - 999
+	            match4 = /\d{4}/,          // 0000 - 9999
+	            match1to2 = /\d{1,2}/,     // 0 - 99
+	            match1to3 = /\d{1,3}/,     // 0 - 999
+	            //match1to4 = /\d{1,4}/,     // 0 - 9999
+	            match2w = /.{2}/,         // 匹配两个字符
+	            match1wto2w = /.{1,2}/,   // 匹配1~2个字符
+	            map = {
+	                //年的后两位
+	                'yy': {
+	                    regex: match2,
+	                    name: 'year'
+	                },
+	                //年
+	                'yyyy': {
+	                    regex: match4,
+	                    name: 'year'
+	                },
+	                //两位数的月，不到两位数则补0
+	                'MM': {
+	                    regex: match2,
+	                    name: 'month'
+	                },
+	                //月
+	                'M': {
+	                    regex: match1to2,
+	                    name: 'month'
+	                },
+	                //两位数的日期，不到两位数则补0
+	                'dd': {
+	                    regex: match2,
+	                    name: 'date'
+	                },
+	                //日期
+	                'd': {
+	                    regex: match1to2,
+	                    name: 'date'
+	                },
+	                //两位数的小时，24小时进制
+	                'HH': {
+	                    regex: match2,
+	                    name: 'hours'
+	                },
+	                //小时，24小时进制
+	                'H': {
+	                    regex: match1to2,
+	                    name: 'hours'
+	                },
+	                //两位数的小时，12小时进制
+	                'hh': {
+	                    regex: match2,
+	                    name: 'hours'
+	                },
+	                //小时，12小时进制
+	                'h': {
+	                    regex: match1to2,
+	                    name: 'hours'
+	                },
+	                //两位数的分钟
+	                'mm': {
+	                    regex: match2,
+	                    name: 'minutes'
+	                },
+	                //分钟
+	                'm': {
+	                    regex: match1to2,
+	                    name: 'minutes'
+	                },
+	                's': {
+	                    regex: match1to2,
+	                    name: 'seconds'
+	                },
+	                'ss': {
+	                    regex: match2,
+	                    name: 'seconds'
+	                },
+	                //上午、下午
+	                'tt': {
+	                    regex: match2w,
+	                    name: 't'
+	                },
+	                //上午、下午
+	                't': {
+	                    regex: match1wto2w,
+	                    name: 't'
+	                },
+	                //毫秒
+	                'S': {
+	                    regex: match1to3,
+	                    name: 'millisecond'
+	                },
+	                //毫秒
+	                'SS': {
+	                    regex: match1to3,
+	                    name: 'millisecond'
+	                },
+	                //毫秒
+	                'SSS': {
+	                    regex: match1to3,
+	                    name: 'millisecond'
+	                }
+	            };
+
+	        return function(token, str, dateObj){
+	            var result, part = map[token];
+	            if(part){
+	                result = str.match(part.regex);
+	                if(result){
+	                    dateObj[part.name] = result[0];
+	                    return result[0];
+	                }
+	            }
+
+	            return null;
+	        };
+	    })();
+
+	    return {
+	        locale: locale,
+	        format: function(val, pattern){
+	            if(Object.prototype.toString.call(val) !== '[object Date]'){
+	                return '';
+	            }
+
+	            if(Object.prototype.toString.call(pattern) !== '[object String]' || pattern === ''){
+	                pattern = 'yyyy-MM-dd HH:mm:ss';
+	            }
+
+	            var fullYear = val.getFullYear(),
+	                month = val.getMonth(),
+	                day = val.getDay(),
+	                date = val.getDate(),
+	                hours = val.getHours(),
+	                minutes = val.getMinutes(),
+	                seconds = val.getSeconds(),
+	                milliseconds = val.getMilliseconds();
+
+	            return pattern.replace(/(\\)?(dd?d?d?|MM?M?M?|yy?y?y?|hh?|HH?|mm?|ss?|tt?|SS?S?)/g, function (m) {
+	                if (m.charAt(0) === '\\') {
+	                    return m.replace('\\', '');
+	                }
+
+	                var locale = DateUtils.locale;
+
+	                switch (m) {
+	                    case "hh":
+	                        return leftPad(hours < 13 ? (hours === 0 ? 12 : hours) : (hours - 12), 2);
+	                    case "h":
+	                        return hours < 13 ? (hours === 0 ? 12 : hours) : (hours - 12);
+	                    case "HH":
+	                        return leftPad(hours, 2);
+	                    case "H":
+	                        return hours;
+	                    case "mm":
+	                        return leftPad(minutes, 2);
+	                    case "m":
+	                        return minutes;
+	                    case "ss":
+	                        return leftPad(seconds, 2);
+	                    case "s":
+	                        return seconds;
+	                    case "yyyy":
+	                        return fullYear;
+	                    case "yy":
+	                        return (fullYear + '').substring(2);
+	                    case "dddd":
+	                        return locale.dayNames[day];
+	                    case "ddd":
+	                        return locale.shortDayNames[day];
+	                    case "dd":
+	                        return leftPad(date, 2);
+	                    case "d":
+	                        return date;
+	                    case "MMMM":
+	                        return locale.monthNames[month];
+	                    case "MMM":
+	                        return locale.shortMonthNames[month];
+	                    case "MM":
+	                        return leftPad(month + 1, 2);
+	                    case "M":
+	                        return month + 1;
+	                    case "t":
+	                        return hours < 12 ? locale.shortAm : locale.shortPm;
+	                    case "tt":
+	                        return hours < 12 ? locale.am : locale.pm;
+	                    case "S":
+	                        return milliseconds;
+	                    case "SS":
+	                        return leftPad(milliseconds, 2);
+	                    case "SSS":
+	                        return leftPad(milliseconds, 3);
+	                    default: 
+	                        return m;
+	                }
+	            });
+	        },
+
+	        parse: function(val, pattern){
+	            if(!val){
+	                return null;
+	            }
+
+	            if(Object.prototype.toString.call(val) === '[object Date]'){
+	                // 如果val是日期，则返回。
+	                return val;
+	            }
+
+	            if(Object.prototype.toString.call(val) !== '[object String]'){
+	                // 如果val不是字符串，则退出。
+	                return null;
+	            }
+
+	            var time;
+	            if(Object.prototype.toString.call(pattern) !== '[object String]' || pattern === ''){
+	                // 如果fmt不是字符串或者是空字符串。
+	                // 使用浏览器内置的日期解析
+	                time = Date.parse(val);
+	                if(isNaN(time)){
+	                    return null;
+	                }
+
+	                return new Date(time);
+	            }
+
+	            var i, token, tmpVal, 
+	                tokens = pattern.match(/(\\)?(dd?|MM?|yy?y?y?|hh?|HH?|mm?|ss?|tt?|SS?S?|.)/g),
+	                dateObj = {
+	                    year: 0,
+	                    month: 1,
+	                    date: 0,
+	                    hours: 0,
+	                    minutes: 0,
+	                    seconds: 0,
+	                    millisecond: 0
+	                };
+
+	            for(i = 0; i < tokens.length; i++){
+	                token = tokens[i];
+	                tmpVal = parseToken(token, val, dateObj);
+
+	                if(tmpVal !== null){
+	                    if(val.length > tmpVal.length){
+	                        val = val.substring(tmpVal.length);
+	                    }else{
+	                        val = '';
+	                    }
+	                }else{
+	                    val = val.substring(token.length);
+	                }
+	            }
+
+	            if(dateObj.t){
+	                if(DateUtils.locale.pm === dateObj.t || DateUtils.locale.shortPm === dateObj.t){
+	                    dateObj.hours = (+dateObj.hours) + 12;
+	                }
+	            }
+
+	            dateObj.month -= 1;
+
+	            return new Date(dateObj.year, dateObj.month, dateObj.date, dateObj.hours, dateObj.minutes, dateObj.seconds, dateObj.millisecond);
+	        }
+	    };
+	})();
+	$("#show").hide();
+	Vue.http.options.emulateJSON = true;//接收的数据全部打成json
 	
-	var date = new Vue({
-		el : '#date',
+	
+	var main = new Vue({
+		el : '#main',
 		data : {
-			times : ''
+			cars : "",
+			selected : '',
+			times : '',
+			selected1: '',
+			years : '',
+			months: '',
+			dates : '',
+			hours : '',
+			minutes : '',
+			syear : '',
+			smonth : '',
+			sdate : '',
+			shour : '',
+			sminute : '',
+			park : '',
+			rent : ''
 		},
 		mounted:function(){
 		  this.show();
 	    },
-	    methods:{
-			show:function(){
-				var hh = new Date().getHours();
-				var mm = new Date().getMinutes();
-				var tts = new Array();
+	  	methods:{
+
+		  show:function(){
+			    this.$http.post('/admin/car/findAll',{"userid":"1"}).then(function(res){
+			    	main.cars=res.body;
+			    	main.selected = res.body[0].carnum;
+                },function(){
+                	console.log('请求失败处理');
+                });
+			    
+			    
+			    this.$http.post('/admin/park/findOne',{"parkid":"1"}).then(function(res){
+			    	main.park=res.body;
+			    	main.rent=main.park.rent;
+                },function(){
+                	console.log('请求失败处理');
+                });
+			  
+			    //入场时间
+			    var tts = new Array();
 				for(var i = 1 ; i < 5 ; i++){
-					tts[i-1] = hh+":"+(mm+10*i);
+					var tt = new Date(new Date().getTime()+1000*600*i);
+ 					tts[i-1] = tt;
 				}
 				this.times = tts;
-	    	}
-		}
-	}) 
+			  	this.selected1 = tts[0];
+			  	
+			  	//当前时间
+			    this.syear = new Date().getYear()+1900;
+				this.smonth = new Date().getMonth()+1;
+				this.sdate = new Date().getDate();
+			  	
+			  	//出厂年
+				var yys = new Array(); 
+				yys[0] = new Date().getYear()+1900;
+				this.years = yys;
+				
+				//出厂月
+				var mms = new Array();
+				var mi = 0;
+				for(var i = new Date().getMonth()+1; i <= (new Date().getMonth()+2 <= 12 ? new Date().getMonth()+2 : 12); i++){
+					mms[mi] = i;
+					mi++;
+				}
+				if(new Date().getMonth() == 12){
+					mms[1] = 1;
+					yys[1] = new Date().getYear()+1901;
+				}
+				this.months = mms;
+				
+				//出厂日
+				var tdate = new Date(this.syear, this.smonth, 0).getDate();
+		    	var dds = new Array(); 
+		    	var di = 0;
+		    	for(var i = this.sdate; i<=tdate; i++){
+		    	    dds[di] = i;
+		    	    di++;
+		    	}
+		    	this.dates = dds;
+				
+				//出厂时
+				var hhs = new Array();
+				var hi = 0;
+				for(var i = new Date().getHours()+2; i <= 22; i++){
+					hhs[hi] = i;
+					hi++;
+				}
+				this.hours = hhs;
+				this.shour = hhs[0];
+				
+				//出厂分
+				var mms = new Array();
+				var mi = 0;
+				for(var i = 0; i < 60; i+=15){
+					mms[mi] = i;
+					mi++;
+				}
+				this.minutes = mms;
+				this.sminute = mms[0];
+		  },
+	      changebyyear:function(){
+	    	  this.sdate = new Date().getDate();
+	    	  var tyear = this.syear;
+	      	  var tmonth = this.smonth;
+	      	  if(new Date().getMonth()+1 != tmonth){
+	      		  this.sdate = 1;
+	      	  }
+	    	  var tdate = new Date(tyear, tmonth, 0).getDate();
+	    	  var dds = new Array(); 
+	    	  var di = 0;
+	    	  for(var i = this.sdate; i<=tdate; i++){
+	    		  dds[di] = i;
+	    		  di++;
+	    	  }
+	    	  this.dates = dds;
+	      },
+	      changebymonth:function(){
+	    	  this.sdate = new Date().getDate();
+	    	  var tyear = this.syear;
+	      	  var tmonth = this.smonth;
+	      	  if(new Date().getMonth()+1 != tmonth){
+	      		  this.sdate = 1;
+	      	  }
+	    	  var tdate = new Date(tyear, tmonth, 0).getDate();
+	    	  var dds = new Array(); 
+	    	  var di = 0;
+	    	  for(var i = this.sdate; i<=tdate; i++){
+	    		  dds[di] = i;
+	    		  di++;
+	    	  }
+	    	  this.dates = dds;
+	    	  
+	    	  var hhs = new Array();
+	    	  var hs = 8;
+	    	  if(new Date().getYear()+1900 == this.syear  && new Date().getMonth()+1 == this.smonth && new Date().getDate() == this.sdate){
+	      		  hs = new Date().getHours()+2;
+	      	  }
+			  var hi = 0;
+			  for(var i = hs; i <= 22; i++){
+			  	  hhs[hi] = i;
+				  hi++;
+			  }
+			  this.hours = hhs;
+			  this.shour = hhs[0];
+	      },
+	      changebydate:function(){
+	    	  var hhs = new Array();
+	    	  var hs = 8;
+	    	  if(new Date().getYear()+1900 == this.syear  && new Date().getMonth()+1 == this.smonth && new Date().getDate() == this.sdate){
+	      		  hs = new Date().getHours()+2;
+	      	  }
+			  var hi = 0;
+			  for(var i = hs; i <= 22; i++){
+			  	  hhs[hi] = i;
+				  hi++;
+			  }
+			  this.hours = hhs;
+			  this.shour = hhs[0];
+	      },
+	      shows:function(){
+	    	  $("#show").toggle();
+	      },
+	      commit:function(){
+// 	    	  this.$http.post('/admin/porder/save',{"parkid":"1","carid":this.selected,"singleprice":this.rent.singleprice,"ostarttime":this.selected1,"oendtime":new Date(this.syear-1900,this.smonth-1,this.sdate,this.shour,this.sminute)}).then(function(res){
+// 			    	alert(res.body.msg);
+//               },function(){
+//               	console.log('请求失败处理');
+//               });
+	    	  $.ajax({
+	    		    url: '/admin/porder/save',
+	    		    data: {
+	    		    	parkid: '1',
+	    		    	carid: this.selected,
+	    		    	singleprice: this.rent.singleprice,
+	    		    	ostarttime : DateUtils.format(this.selected1, 'yyyy-MM-dd HH:mm:ss'),
+	    		    	oendtime : DateUtils.format(new Date(this.syear,this.smonth-1,this.sdate,this.shour,this.sminute), 'yyyy-MM-dd HH:mm:ss'),
+	    		    },
+	    		    dataType: 'json',
+	    		    type: 'post'
+	    		}).done(function(json){
+	    		    alert(json.msg);
+	    		});
+	      }
+	  	}	
+	})
+	
+
 </script>
 
 

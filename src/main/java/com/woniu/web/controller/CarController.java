@@ -13,7 +13,7 @@ import com.woniu.model.Message;
 import com.woniu.service.ICarService;
 
 @RestController
-@RequestMapping("/admin/car")
+@RequestMapping("/admin/car/")
 public class CarController {
 
 	@Resource
@@ -51,7 +51,6 @@ public class CarController {
 	@RequestMapping("findAll")
 	private List<Car> finAll(String userid) {
 		List<Car> list = carServiceImpl.findAll(userid);
-		
 		return list;
 	}
 }

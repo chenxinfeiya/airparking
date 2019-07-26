@@ -50,6 +50,8 @@ public class PorderServiceImpl implements IPorderService{
 	@Override
 	@Transactional
 	public void save(Porder porder) {
+		System.out.println("PorderServiceImpl.save()");
+		System.out.println(porder);
 		porderMapper.insertSelective(porder);
 	}
 	

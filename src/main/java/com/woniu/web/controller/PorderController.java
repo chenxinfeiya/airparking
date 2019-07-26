@@ -1,12 +1,15 @@
 package com.woniu.web.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,10 +32,20 @@ public class PorderController {
 		return list;
 	}
 	
+
+	@InitBinder
+	public void initBinder(ServletRequestDataBinder binder) {
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));        
+	
+	}
 	
 	@RequestMapping("save")
-	private Message save(Porder porder){
+	private Message save(Porder porder,HttpSession session){
+		System.out.println("PorderController.save()");
 		Message message = null;
+		System.out.println(((User)session.getAttribute("loginUser")).getUserid());
+		porder.setUserid(((User)session.getAttribute("loginUser")).getUserid());
 		porder.setOcreatetime(new Date());
 		porder.setOrderid(CreateUUID.getUUID());
 		try {
